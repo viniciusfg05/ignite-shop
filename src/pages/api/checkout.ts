@@ -2,7 +2,7 @@ import { NextApiRequest, NextApiResponse } from "next";
 import { stripe } from "../../lib/stripe";
 
 export default async function headler(req: NextApiRequest, res: NextApiResponse) {
-    const success_url = `${process.env.NEXT_URL}/success`;
+    const success_url = `${process.env.NEXT_URL}/success?session_id={CHECKOUT_SESSION_ID}`;
     const cancel_url = `${process.env.NEXT_URL}/`;
 
     const { priceId } = req.body

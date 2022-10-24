@@ -1,5 +1,6 @@
 import { HomeContainerStyled, ProductStyled } from "../styles/pages/Home"
 import { useKeenSlider } from "keen-slider/react" // Slider
+import Head from 'next/head'
 import Link from "next/link"
 import "keen-slider/keen-slider.min.css" // Slider - CSS
 import Image from "next/future/image"
@@ -27,20 +28,26 @@ export default function Home({products}: HomeProps) {
 
 
   return (
-    <HomeContainerStyled ref={sliderRef} className="keen-slider">
-      {products.map( product => (
-        <Link key={product.id} href={`product/${product.id}`} prefetch={false}>
-          <ProductStyled  className="keen-slider__slide">
-            <Image src={product.imageUrl} width={520} height={480} alt=""/>
+    <>
+      <Head>
+        <title>Home | Ignite Shop</title>
+      </Head>
 
-            <footer>
-              <strong>{product.name}</strong>
-              <span>{product.price}</span>
-            </footer>
-          </ProductStyled>
-        </Link>
-      ))}
-    </HomeContainerStyled>
+      <HomeContainerStyled ref={sliderRef} className="keen-slider">
+        {products.map( product => (
+          <Link key={product.id} href={`product/${product.id}`} prefetch={false}>
+            <ProductStyled  className="keen-slider__slide">
+              <Image src={product.imageUrl} width={520} height={480} alt=""/>
+
+              <footer>
+                <strong>{product.name}</strong>
+                <span>{product.price}</span>
+              </footer>
+            </ProductStyled>
+          </Link>
+        ))}
+      </HomeContainerStyled>
+    </>
   )
 }
 

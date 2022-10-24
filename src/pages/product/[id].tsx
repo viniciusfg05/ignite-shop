@@ -2,6 +2,7 @@ import axios from "axios";
 import { GetStaticPaths, GetStaticProps } from "next";
 import { redirect } from "next/dist/server/api-utils";
 import Image from "next/future/image"
+import Head from "next/head";
 import { useState } from "react";
 import Stripe from "stripe";
 import { stripe } from "../../lib/stripe";
@@ -41,20 +42,26 @@ export default function Product({ product }: ProductProps) {
 
 
   return (
-    <ProductContainerStyled>
-      <ImageContainerStyled>
-        <Image width={520} height={520} src={product.imageUrl} alt=""/>
-      </ImageContainerStyled>
-      
-      <ProductDetailsStyled>
-        <h1>{product.name}</h1>
-        <span>{product.price}</span>
+    <>
+      <Head>
+        <title>{product.name} | Ignite Shop</title>
+      </Head>
 
-        <p>{product.description}</p>
+      <ProductContainerStyled>
+        <ImageContainerStyled>
+          <Image width={520} height={520} src={product.imageUrl} alt=""/>
+        </ImageContainerStyled>
+        
+        <ProductDetailsStyled>
+          <h1>{product.name}</h1>
+          <span>{product.price}</span>
 
-        <button disabled={isCreatingCheckout} onClick={handleBuyProduct}>Comprar Agora</button>
-      </ProductDetailsStyled>
-    </ProductContainerStyled>
+          <p>{product.description}</p>
+
+          <button disabled={isCreatingCheckout} onClick={handleBuyProduct}>Comprar Agora</button>
+        </ProductDetailsStyled>
+      </ProductContainerStyled>
+    </>
   )
 }
 
