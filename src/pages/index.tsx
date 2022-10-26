@@ -1,4 +1,4 @@
-import { HomeContainerStyled, ProductStyled } from "../styles/pages/Home"
+import { CardConteinerStyled, HomeContainerStyled, ProductStyled } from "../styles/pages/Home"
 import { useKeenSlider } from "keen-slider/react" // Slider
 import Head from 'next/head'
 import Link from "next/link"
@@ -7,6 +7,9 @@ import Image from "next/future/image"
 import { stripe } from "../lib/stripe"
 import { GetStaticProps } from "next"
 import Stripe from "stripe"
+import { Handbag } from "phosphor-react"
+import { useState } from "react"
+import axios from "axios"
 
 interface HomeProps {
   products: {
@@ -16,9 +19,20 @@ interface HomeProps {
     url: string;
     price: string;
   }[]
+  productSelectData: {
+    id: string;
+    name: string;
+    imageUrl: string;
+    url: string;
+    price: string;
+    description: string
+    defaultPriceId: string
+  }
 }
 
-export default function Home({products}: HomeProps) {
+export default function Home({products, productSelectData}: HomeProps) {
+  const [ card, setCard ] = useState([])
+
   const [ sliderRef ] = useKeenSlider({ // sliderRef - Ref do React para modificar o conteiner do slider pelo javascript
     slides: {
       perView: 3, // # content por pagina
@@ -26,6 +40,9 @@ export default function Home({products}: HomeProps) {
     }
   })
 
+  async function handleBuyProduct(data) {
+    setCard([...card, data])
+  }
 
   return (
     <>
@@ -35,23 +52,30 @@ export default function Home({products}: HomeProps) {
 
       <HomeContainerStyled ref={sliderRef} className="keen-slider">
         {products.map( product => (
-          <Link key={product.id} href={`product/${product.id}`} prefetch={false}>
-            <ProductStyled  className="keen-slider__slide">
+          <ProductStyled key={product.id}  className="keen-slider__slide">
+          <Link href={`product/${product.id}`} prefetch={false}>
               <Image src={product.imageUrl} width={520} height={480} alt=""/>
+          </Link>
 
               <footer>
-                <strong>{product.name}</strong>
-                <span>{product.price}</span>
+                <header>
+                  <strong>{product.name}</strong>
+                  <span>{product.price}</span>
+                </header>
+
+                <CardConteinerStyled onClick={() => handleBuyProduct(`product/${product.id}`)}>
+                  <Handbag color="#fff" size={32} weight="bold"/>
+                </CardConteinerStyled>
               </footer>
             </ProductStyled>
-          </Link>
         ))}
       </HomeContainerStyled>
     </>
   )
 }
 
-export const getStaticProps: GetStaticProps = async ()   => {
+
+export const getStaticProps: GetStaticProps<any, {id: string }> = async ({ params })   => {
   const response = await stripe.products.list({
     expand: ["data.default_price"]
   })
@@ -75,8 +99,8 @@ export const getStaticProps: GetStaticProps = async ()   => {
 
   return {
     props: {
-      products 
-    },
+      products,
+      },
     revalidate: 60 * 60 * 2 // 2 horas
   }
 }

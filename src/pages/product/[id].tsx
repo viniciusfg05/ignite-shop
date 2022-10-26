@@ -16,7 +16,7 @@ interface ProductProps {
     url: string;
     price: string;
     description: string
-    defaultPriceId: string
+    defaultPriceId: []
   }
 }
 
@@ -26,8 +26,17 @@ export default function Product({ product }: ProductProps) {
   async function handleBuyProduct() {
     try {
       setIsCreatingCheckout(true)
+      const produtos = ['price_1Lw7pwGmusl5ZLtI1R9LKP8l', 'price_1Lw7pwGmusl5ZLtI1R9LKP8l']
+
+      const data = produtos.map(data => {
+        return {
+          price: data,
+          quantity: 1
+        }
+      })
+      
       const response = await axios.post('/api/checkout', {
-        priceId: product.defaultPriceId,
+        lineItemsPriceId: data
       })
 
       const { checkoutUrl } = response.data;
@@ -80,8 +89,8 @@ export const getStaticProps: GetStaticProps<any, {id: string }> = async ({ param
     expand: ['default_price',]
   })
 
+
   const price = product.default_price as Stripe.Price
-  
 
   return {
     props: {

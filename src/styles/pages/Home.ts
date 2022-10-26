@@ -45,15 +45,21 @@ export const ProductStyled = styled("a", {
         transition: 'all 0.2s ease-in-out',
         overflow: 'hidden',
 
-        strong: {
-            fontSize: '$lg',
+        header: {
+            display: 'flex',
+            flexDirection: 'column',
+
+            strong: {
+                fontSize: '$lg',
+            },
+        
+            span: {
+                fontSize: '$xl',
+                color: '$green300',
+                fontWeight: 'bold',
+            }
         },
-    
-        span: {
-            fontSize: '$xl',
-            color: '$green300',
-            fontWeight: 'bold',
-        }
+
     },
     
     '&:hover': {
@@ -64,4 +70,17 @@ export const ProductStyled = styled("a", {
         }
     }
 
+})
+
+
+export const CardConteinerStyled = styled("button", {
+    border: 'none',
+    width: '3.5rem',
+    height: '3.5rem',
+    backgroundColor: '$green500',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 8,
+    cursor: 'pointer',
 })
