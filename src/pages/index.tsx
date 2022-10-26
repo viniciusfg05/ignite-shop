@@ -10,6 +10,7 @@ import Stripe from "stripe"
 import { Handbag } from "phosphor-react"
 import { useState } from "react"
 import axios from "axios"
+import { Modal } from "./modal"
 
 interface HomeProps {
   products: {
@@ -52,10 +53,9 @@ export default function Home({products, productSelectData}: HomeProps) {
 
       <HomeContainerStyled ref={sliderRef} className="keen-slider">
         {products.map( product => (
-          <ProductStyled key={product.id}  className="keen-slider__slide">
-          <Link href={`product/${product.id}`} prefetch={false}>
+        <Link key={product.id} href={`product/${product.id}`} prefetch={false}>
+          <ProductStyled   className="keen-slider__slide">
               <Image src={product.imageUrl} width={520} height={480} alt=""/>
-          </Link>
 
               <footer>
                 <header>
@@ -68,6 +68,7 @@ export default function Home({products, productSelectData}: HomeProps) {
                 </CardConteinerStyled>
               </footer>
             </ProductStyled>
+          </Link>
         ))}
       </HomeContainerStyled>
     </>

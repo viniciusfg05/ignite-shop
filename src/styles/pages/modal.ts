@@ -1,18 +1,30 @@
-import { Content, Overlay } from '@radix-ui/react-dialog'
-import { styled } from '..'
+import { styled } from ".."
 
-export const OverlayStyled = styled(Overlay, {
-    position: 'fixed',
-    width: '100vw',
-    height: '100vw',
-    opacity: 1,
-    backgroundColor: '$gray800'
+import {Button, DrawerContent} from '@chakra-ui/react'
+
+export const NumberCardStyled = styled("p", {
+    width: '2rem',
+    height: '2rem',
+    position: 'absolute',
+    backgroundColor: '$green300',
+    borderRadius: '50%',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: '-3rem',
+    marginLeft: '2rem',
+    border: `5px solid #121214`
+
 })
 
-export const Contents = styled(Content, {
-    position: 'fixed',
-    width: '100rem',
-    height: '100rem',
-    backgroundColor: '$gray800',
-    opacity: 1,
+export const DrawerContentStyled = styled(DrawerContent, {
+    // width: '3rem',
+    // height: '3rem',
+    // background: '$gray800',
+    // display: 'flex',
+    // alignItems: 'center',
+    // justifyContent: 'center',
+    // borderRadius: 8,
+
+
 })

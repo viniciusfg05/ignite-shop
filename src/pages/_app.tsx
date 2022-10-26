@@ -11,22 +11,23 @@ import Image from "next/future/image";
 import { Handbag } from "phosphor-react";
 import * as Dialog from '@radix-ui/react-dialog';
 import { Modal } from "./modal";
+import { ChakraThemeConfig } from "../styles/chakraThemeConfig";
+import { ChakraProvider  } from '@chakra-ui/react'
 
 globalStyles();
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
     <ContainerStyled>
-      <HeaderStyled>
-        <Image src={logo} alt="" />
+      <ChakraProvider theme={ChakraThemeConfig}>
+        <HeaderStyled>
+          <Image src={logo} alt="" />
 
-        <CardConteinerStyled>
-          <Handbag size={24} weight="bold" />
-          <NumberCardStyled>1</NumberCardStyled>
-        </CardConteinerStyled>
+          <Modal />
           
-      </HeaderStyled>
-      <Component {...pageProps} />
+        </HeaderStyled>
+        <Component {...pageProps} />
+      </ChakraProvider>
     </ContainerStyled>
   );
 }
