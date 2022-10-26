@@ -10,25 +10,29 @@ import {
 import Image from "next/future/image";
 import { Handbag } from "phosphor-react";
 import * as Dialog from '@radix-ui/react-dialog';
-import { Modal } from "./modal";
 import { ChakraThemeConfig } from "../styles/chakraThemeConfig";
-import { ChakraProvider  } from '@chakra-ui/react'
+import { ChakraProvider } from '@chakra-ui/react'
+import { IgniteShopProvider } from "../context/ContextApi";
+import Modal from "../componets/modal/modal";
 
 globalStyles();
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
-    <ContainerStyled>
-      <ChakraProvider theme={ChakraThemeConfig}>
-        <HeaderStyled>
-          <Image src={logo} alt="" />
+    <ChakraProvider theme={ChakraThemeConfig}>
+      <IgniteShopProvider>
 
-          <Modal />
-          
-        </HeaderStyled>
-        <Component {...pageProps} />
-      </ChakraProvider>
-    </ContainerStyled>
+        <ContainerStyled>
+          <HeaderStyled>
+            <Image src={logo} alt="" />
+
+            <Modal />
+
+          </HeaderStyled>
+          <Component {...pageProps} />
+        </ContainerStyled>
+      </IgniteShopProvider>
+    </ChakraProvider>
   );
 }
 

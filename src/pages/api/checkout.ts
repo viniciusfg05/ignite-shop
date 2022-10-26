@@ -7,8 +7,7 @@ export default async function headler(req: NextApiRequest, res: NextApiResponse)
 
     const { lineItemsPriceId }  = req.body
 
-    console.log(lineItemsPriceId)
-    console.log('console do priceId')
+    console.log(req.body)
 
     if (req.method !== "POST") {
         return res.status(405).json({ error: "Method not allowed." });
