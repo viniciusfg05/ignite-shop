@@ -1,11 +1,18 @@
 import { createContext, ReactNode, useEffect, useState } from "react";
 
-
+interface CardProps {
+  id: string;
+  name: string;
+  imageUrl: string;
+  url: string;
+  price: string;
+}
 
 
 interface CoffeePropsTypes {
-    setCardFunction: ([]) => void;
-    card: any;
+    setCardFunction: (data?: CardProps[], deleteCard?: CardProps) => void;
+    card: CardProps[];
+    setDeleteCard: (data?: CardProps[]) => void
 }
 
 interface CoffeProviderProps {
@@ -18,16 +25,20 @@ export const IgniteShopContext = createContext({} as CoffeePropsTypes);
 export function IgniteShopProvider({ children }: CoffeProviderProps) {
     const [card, setCard] = useState([])
 
-
-    function setCardFunction(data: []) {
+    function setCardFunction(data: [], deleteCard: CardProps) {
         setCard([...card, data])
     }
+
+    function setDeleteCard(data) {
+      setCard(data)
+  }
 
   return (
     <IgniteShopContext.Provider
       value={{
         setCardFunction,
-        card
+        card,
+        setDeleteCard
       }}
     >
       {children}

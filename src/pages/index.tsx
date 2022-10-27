@@ -32,10 +32,11 @@ interface HomeProps {
   }
 }
 
+
+
 export default function Home({ products, productSelectData }: HomeProps) {
   const [card, setCard] = useState([])
   const { setCardFunction } = useContext(IgniteShopContext)
-
 
   const [sliderRef] = useKeenSlider({ // sliderRef - Ref do React para modificar o conteiner do slider pelo javascript
     slides: {
@@ -43,8 +44,6 @@ export default function Home({ products, productSelectData }: HomeProps) {
       spacing: 48,
     }
   })
-
-
 
   async function handleBuyProduct(data) {
     setCardFunction(data)
@@ -69,7 +68,7 @@ export default function Home({ products, productSelectData }: HomeProps) {
                 <span>{product.price}</span>
               </header>
 
-                <CardConteinerStyled onClick={() => handleBuyProduct(`${product.id}`)}>
+                <CardConteinerStyled onClick={() => handleBuyProduct(product)}>
                   <Handbag color="#fff" size={32} weight="bold" />
                 </CardConteinerStyled>
             </footer>

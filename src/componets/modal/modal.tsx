@@ -19,12 +19,22 @@ import Image from "next/future/image"
 import camisa from "../../assets/camisa.png"
 import { GetServerSideProps, GetStaticProps } from 'next'
 import { IgniteShopContext } from '../../context/ContextApi'
+import { stringify } from 'querystring'
 
 export default function Modal(req: any) {
   const { isOpen, onOpen, onClose } = useDisclosure()
   const btnRef = useRef()
 
-  const { card } = useContext(IgniteShopContext)
+  const { card, setDeleteCard } = useContext(IgniteShopContext)
+  console.log(card)
+
+  function handleDeleteCard(id: String) {
+    const data = card.filter(card => card.id !== id)
+
+    setDeleteCard(data)
+    // setCardFunction(deleteCard)
+  }
+
 
   return (
     <>
@@ -41,17 +51,21 @@ export default function Modal(req: any) {
 
           <h1>Sacola de compras</h1>
 
-          <section>
-            <Image src={camisa} width={94} height={94} alt="" />
+          {card.map(card => (
+            <>
+              <section key={card.id}>
+              <Image src={card.imageUrl === undefined ? "" : card.imageUrl} width={94} height={94} alt="" />
 
-            <main>
-              <p>Camiseta Beyond the Limits</p>
-              <strong>R$ 79,90</strong>
+              <main>
+                <p>{card.name}</p>
+                <strong>{card.price}</strong>
 
-              <button>Remover</button>
-            </main>
+                <button onClick={() => handleDeleteCard(card.id)}>Remover</button>
+              </main>
 
-          </section>
+              </section>
+            </>
+            ))}
 
           <footer>
             <section>
@@ -73,8 +87,9 @@ export default function Modal(req: any) {
   )
 }
 
-export const getServerSideProps: GetServerSideProps = async ({ resolvedUrl }) => {
-  console.log(resolvedUrl)
+export const getServerSideProps: GetServerSideProps = async ({ query }) => {
+
+
   return {
       props: {
 
