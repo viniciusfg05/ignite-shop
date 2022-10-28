@@ -20,6 +20,7 @@ interface HomeProps {
     imageUrl: string;
     url: string;
     price: string;
+    defaultPriceId: string
   }[]
   productSelectData: {
     id: string;
@@ -86,13 +87,17 @@ export const getStaticProps: GetStaticProps<any, { id: string }> = async ({ para
   })
 
   const products = response.data.map(product => {
+  
     const price = product.default_price as Stripe.Price
+
+    console.log(price.id)
 
     return {
       id: product.id,
       name: product.name,
       imageUrl: product.images[0],
       url: product.url,
+      defaultPriceId: price.id,
       price: new Intl.NumberFormat("pt-BR", {
         style: 'currency',
         currency: 'BRL'

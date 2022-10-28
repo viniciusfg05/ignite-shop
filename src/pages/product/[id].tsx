@@ -3,8 +3,9 @@ import { GetStaticPaths, GetStaticProps } from "next";
 import { redirect } from "next/dist/server/api-utils";
 import Image from "next/future/image"
 import Head from "next/head";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import Stripe from "stripe";
+import { IgniteShopContext } from "../../context/ContextApi";
 import { stripe } from "../../lib/stripe";
 import { ImageContainerStyled, ProductContainerStyled, ProductDetailsStyled } from "../../styles/pages/product";
 
@@ -23,33 +24,12 @@ interface ProductProps {
 export default function Product({ product }: ProductProps) {
   const [ isCreatingCheckout, setIsCreatingCheckout ] = useState(false)
 
-  async function handleBuyProduct() {
-    try {
-      setIsCreatingCheckout(true)
-      const produtos = ['price_1Lw7pwGmusl5ZLtI1R9LKP8l', 'price_1Lw7pwGmusl5ZLtI1R9LKP8l']
+  const { setCardFunction } = useContext(IgniteShopContext)
 
-      const data = produtos.map(data => {
-        return {
-          price: data,
-          quantity: 1
-        }
-      })
-      
-      const response = await axios.post('/api/checkout', {
-        lineItemsPriceId: data
-      })
 
-      const { checkoutUrl } = response.data;
-
-      window.location.href = checkoutUrl;
-    } catch (err) {
-      setIsCreatingCheckout(false)
-
-      alert('Falha ao redirecionar para o checkout!')
-    }
+  async function handleBuyProduct(data: any) {
+      setCardFunction(data)
   }
-
-
   return (
     <>
       <Head>
@@ -67,7 +47,7 @@ export default function Product({ product }: ProductProps) {
 
           <p>{product.description}</p>
 
-          <button disabled={isCreatingCheckout} onClick={handleBuyProduct}>Comprar Agora</button>
+          <button disabled={isCreatingCheckout} onClick={() => handleBuyProduct(product)}>Adicionar no carrinho</button>
         </ProductDetailsStyled>
       </ProductContainerStyled>
     </>
@@ -90,7 +70,6 @@ export const getStaticProps: GetStaticProps<any, {id: string }> = async ({ param
   const product = await stripe.products.retrieve(productId, {
     expand: ['default_price',]
   })
-
 
   const price = product.default_price as Stripe.Price
 

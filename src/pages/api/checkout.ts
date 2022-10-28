@@ -5,9 +5,7 @@ export default async function headler(req: NextApiRequest, res: NextApiResponse)
     const success_url = `${process.env.NEXT_URL}/success?session_id={CHECKOUT_SESSION_ID}`;
     const cancel_url = `${process.env.NEXT_URL}/`;
 
-    const { lineItemsPriceId, homeUrl }  = req.body
-
-    console.log(homeUrl)
+    const { lineItemsPriceId }  = req.body
 
     if (req.method !== "POST") {
         return res.status(405).json({ error: "Method not allowed." });
@@ -27,12 +25,6 @@ export default async function headler(req: NextApiRequest, res: NextApiResponse)
     return (
       res.status(200).json({
         checkoutUrl: checkoutSessions.url,
-        homeUrl: 'looooo'
-      }),
-
-      req.body({
-        
-
       })
     )
 

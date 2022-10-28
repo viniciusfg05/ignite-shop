@@ -13,26 +13,58 @@ import {
   Icon,
 } from '@chakra-ui/react'
 import { Handbag } from 'phosphor-react'
-import { useContext, useRef } from 'react'
+import { useContext, useRef, useState } from 'react'
 import { DrawerContentStyled, NumberCardStyled, ProductStyled } from '../../styles/pages/modal'
 import Image from "next/future/image"
 import camisa from "../../assets/camisa.png"
 import { GetServerSideProps, GetStaticProps } from 'next'
 import { IgniteShopContext } from '../../context/ContextApi'
 import { stringify } from 'querystring'
+import axios from 'axios'
 
 export default function Modal(req: any) {
   const { isOpen, onOpen, onClose } = useDisclosure()
+  const [ productIds, setProductIds ] = useState({})
+
   const btnRef = useRef()
 
   const { card, setDeleteCard } = useContext(IgniteShopContext)
-  console.log(card)
+
+  async function handleSelectItensCard() {
+    
+    try {
+      const reponse = card.map(card => {
+        return card.defaultPriceId
+      })
+      const produtos = reponse.map(data => {
+        return data
+      })
+      
+      const data = produtos.map(data => {
+        return {
+          price: data,
+          quantity: 1
+        }
+      })
+
+      const response = await axios.post('/api/checkout', {
+        lineItemsPriceId: data
+      })
+
+      const { checkoutUrl } = response.data;
+
+      window.location.href = checkoutUrl; 
+    } catch (err) {
+
+      alert('Falha ao redirecionar para o checkout!')
+    }
+
+  }
 
   function handleDeleteCard(id: String) {
     const data = card.filter(card => card.id !== id)
 
     setDeleteCard(data)
-    // setCardFunction(deleteCard)
   }
 
 
@@ -78,21 +110,11 @@ export default function Modal(req: any) {
               <strong>R$ 270,00</strong>
             </section>
 
-            <button>Finalizar compra</button>
+            <button  onClick={handleSelectItensCard}>Finalizar compra</button>
           </footer>
 
         </DrawerContentStyled>
       </Drawer>
     </>
   )
-}
-
-export const getServerSideProps: GetServerSideProps = async ({ query }) => {
-
-
-  return {
-      props: {
-
-      }
-  }
 }
