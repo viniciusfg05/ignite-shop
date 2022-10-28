@@ -5,7 +5,7 @@ interface CardProps {
   name: string;
   imageUrl: string;
   url: string;
-  price: string;
+  price: number;
   defaultPriceId: string;
 
 }

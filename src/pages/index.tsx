@@ -7,7 +7,7 @@ import Image from "next/future/image"
 import { stripe } from "../lib/stripe"
 import { GetStaticProps } from "next"
 import Stripe from "stripe"
-import { Handbag } from "phosphor-react"
+import { CaretLeft, CaretRight, Handbag } from "phosphor-react"
 import { useContext, useEffect, useState } from "react"
 import axios from "axios"
 import router from "next/router"
@@ -19,7 +19,7 @@ interface HomeProps {
     name: string;
     imageUrl: string;
     url: string;
-    price: string;
+    price: number;
     defaultPriceId: string
   }[]
   productSelectData: {
@@ -27,7 +27,7 @@ interface HomeProps {
     name: string;
     imageUrl: string;
     url: string;
-    price: string;
+    price: number;
     description: string
     defaultPriceId: string
   }
@@ -37,18 +37,32 @@ interface HomeProps {
 
 export default function Home({ products, productSelectData }: HomeProps) {
   const [card, setCard] = useState([])
+  const [loaded, setLoaded] = useState(false)
+  const [currentSlide, setCurrentSlide] = useState(0)
   const { setCardFunction } = useContext(IgniteShopContext)
 
-  const [sliderRef] = useKeenSlider({ // sliderRef - Ref do React para modificar o conteiner do slider pelo javascript
+  const [sliderRef, instanceRef] = useKeenSlider({ // sliderRef - Ref do React para modificar o conteiner do slider pelo javascript
+    initial: 0,
+    slideChanged(slider) {
+      setCurrentSlide(slider.track.details.rel)
+    },
     slides: {
-      perView: 3, // # content por pagina
+      perView: 3,
       spacing: 48,
+    },
+    created() {
+      setLoaded(true)
     }
   })
 
   async function handleBuyProduct(data) {
     setCardFunction(data)
   }
+
+  const priceFormatter = new Intl.NumberFormat('pt-BR', {
+    style: "currency",
+    currency: "BRL"
+  })
 
   return (
     <>
@@ -66,13 +80,36 @@ export default function Home({ products, productSelectData }: HomeProps) {
             <footer>
               <header>
                 <strong>{product.name}</strong>
-                <span>{product.price}</span>
+                <span>{priceFormatter.format(product.price)}</span>
               </header>
 
-                <CardConteinerStyled onClick={() => handleBuyProduct(product)}>
-                  <Handbag color="#fff" size={32} weight="bold" />
-                </CardConteinerStyled>
+              <CardConteinerStyled onClick={() => handleBuyProduct(product)}>
+                <Handbag color="#fff" size={32} weight="bold" />
+              </CardConteinerStyled>
             </footer>
+            
+            <>
+              {loaded && instanceRef.current === 0 (
+                <>
+                  {/* <button
+                    onClick={(e: any) => e.stopPropagation() || instanceRef.current?.prev()}
+                    // disabled={currentSlide === 3 ? true : false} 
+                  >
+                    <CaretLeft />
+                  </button> */}
+
+                  <button
+                    onClick={(e: any) => e.stopPropagation() || instanceRef.current?.next()
+                    }
+
+                    // disabled={currentSlide === 3 ? true : false}
+                  >
+                    <CaretRight />
+                  </button>
+                </>
+              )}
+
+            </>
           </ProductStyled>
         ))}
       </HomeContainerStyled>
@@ -87,7 +124,7 @@ export const getStaticProps: GetStaticProps<any, { id: string }> = async ({ para
   })
 
   const products = response.data.map(product => {
-  
+
     const price = product.default_price as Stripe.Price
 
     console.log(price.id)
@@ -97,12 +134,8 @@ export const getStaticProps: GetStaticProps<any, { id: string }> = async ({ para
       name: product.name,
       imageUrl: product.images[0],
       url: product.url,
+      price: price.unit_amount / 100,
       defaultPriceId: price.id,
-      price: new Intl.NumberFormat("pt-BR", {
-        style: 'currency',
-        currency: 'BRL'
-      }).format(price.unit_amount / 100), //retona em centavos 
-
     }
 
   })

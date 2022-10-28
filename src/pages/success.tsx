@@ -5,6 +5,8 @@ import { stripe } from '../lib/stripe'
 import { SuccessContainerStyled, ImageContainerStyled, ImageContentStyled } from '../styles/pages/success'
 import Image from "next/future/image"
 import Head from 'next/head'
+import { IgniteShopContext } from '../context/ContextApi'
+import { useContext } from 'react'
 
 
 interface SuccessProps {
@@ -14,6 +16,9 @@ interface SuccessProps {
 }
 
 export default function Success({ product, customerName }: any) {
+  const { card, setDeleteCard } = useContext(IgniteShopContext)
+
+
     return (
         <>
             <Head>
@@ -26,13 +31,13 @@ export default function Success({ product, customerName }: any) {
             <SuccessContainerStyled>
                 <ImageContainerStyled>
                     {product.map(product => (
-                        <ImageContentStyled>
+                        <ImageContentStyled key={product.id} >
                             <Image src={product.imageUrl} width={120} height={110} alt={product.name} />
                         </ImageContentStyled>
                     ))}
                 </ImageContainerStyled>
                     <h1>Compra Efetuada! </h1>     
-                    <p>Uhuul <strong>${customerName}</strong>, sua compra de <span>{3}</span> camisetas já está a caminho da sua casa. </p>
+                    <p>Uhuul <strong>{customerName}</strong>, sua compra de <span>{product.length}</span> camisetas já está a caminho da sua casa. </p>
                 <Link href={'/'}>
                     Voltar ao catálago
                 </Link>

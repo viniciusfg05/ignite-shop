@@ -24,11 +24,29 @@ import axios from 'axios'
 
 export default function Modal(req: any) {
   const { isOpen, onOpen, onClose } = useDisclosure()
+  const { card, setDeleteCard } = useContext(IgniteShopContext)
   const [ productIds, setProductIds ] = useState({})
+
+
+  const somarTransaction = card.reduce((acc, card ) => {
+      acc.income += card.price; // pega o acc Income e soma com o price
+      acc.total += card.price 
+
+      return acc
+  }, {
+      income: 0,
+      outcome: 0,
+      total: 0,
+  })
+
+  const priceFormatter = new Intl.NumberFormat('pt-BR', {
+    style: "currency",
+    currency: "BRL"
+  })
+
 
   const btnRef = useRef()
 
-  const { card, setDeleteCard } = useContext(IgniteShopContext)
 
   async function handleSelectItensCard() {
     
@@ -90,7 +108,7 @@ export default function Modal(req: any) {
 
               <main>
                 <p>{card.name}</p>
-                <strong>{card.price}</strong>
+                <strong>{priceFormatter.format(card.price)}</strong>
 
                 <button onClick={() => handleDeleteCard(card.id)}>Remover</button>
               </main>
@@ -102,12 +120,12 @@ export default function Modal(req: any) {
           <footer>
             <section>
               <p>Quantidade</p>
-              <span>3 item</span>
+              <span>{card.length} itens </span>
             </section>
 
             <section>
               <p>Valor total</p>
-              <strong>R$ 270,00</strong>
+              <strong>{priceFormatter.format(somarTransaction.income)}</strong>
             </section>
 
             <button  onClick={handleSelectItensCard}>Finalizar compra</button>

@@ -60,6 +60,8 @@ export const ImageContentStyled =  styled('section', {
 
     alignItems: 'center',
     justifyContent: 'center',
+    marginLeft: '-3.7rem',
+    
 
 
 
