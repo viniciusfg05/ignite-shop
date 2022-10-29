@@ -41,7 +41,7 @@ export default function Home({ products, productSelectData }: HomeProps) {
   const [currentSlide, setCurrentSlide] = useState(0)
   const { setCardFunction } = useContext(IgniteShopContext)
 
-  const [sliderRef, instanceRef] = useKeenSlider<HTMLDivElement>({
+  const [sliderRef, instanceRef] = useKeenSlider({ // sliderRef - Ref do React para modificar o conteiner do slider pelo javascript
     initial: 0,
     slideChanged(slider) {
       setCurrentSlide(slider.track.details.rel)
@@ -52,8 +52,10 @@ export default function Home({ products, productSelectData }: HomeProps) {
     },
     created() {
       setLoaded(true)
-    },
+    }
   })
+
+  console.log(instanceRef.current.slides)
 
   async function handleBuyProduct(data) {
     setCardFunction(data)
@@ -63,32 +65,6 @@ export default function Home({ products, productSelectData }: HomeProps) {
     style: "currency",
     currency: "BRL"
   })
-
-  function Arrow(props: {
-    disabled: boolean
-    left?: boolean
-    onClick: (e: any) => void
-  }) {
-    const disabeld = props.disabled ? " arrow--disabled" : ""
-    return (
-      <svg
-        onClick={props.onClick}
-        className={`arrow ${props.left ? "arrow--left" : "arrow--right"
-          } ${disabeld}`}
-        xmlns="http://www.w3.org/2000/svg"
-        viewBox="0 0 24 24"
-      >
-        {props.left && (
-          <path d="M16.67 0l2.83 2.829-9.339 9.175 9.339 9.167-2.83 2.829-12.17-11.996z" />
-        )}
-        {!props.left && (
-          <path d="M5 3l3.057-3 11.943 12-11.943 12-3.057-3 9-9z" />
-        )}
-      </svg>
-    )
-  }
-
-  console.log(currentSlide)
 
   return (
     <>
@@ -113,54 +89,29 @@ export default function Home({ products, productSelectData }: HomeProps) {
                 <Handbag color="#fff" size={32} weight="bold" />
               </CardConteinerStyled>
             </footer>
-
-            <>
-              {instanceRef.current && (
-                <>
-
-
-                  { currentSlide === 0  ? (
-                    <Arrow
-                    onClick={(e: any) =>
-                        e.stopPropagation() || instanceRef.current?.next()
-                      }
-                      disabled={
-                        currentSlide ===
-                        instanceRef.current.track.details.slides.length - 1
-                      }
-                      />
-                      ) : (
-                        
-                          <Arrow
-                            left
-                            onClick={(e: any) =>
-                              e.stopPropagation() || instanceRef.current?.prev()
-                            }
-                            disabled={currentSlide === 0 ?  true : false}
-                          />
-                  )}
-                </>
-              )}
-            </>
-
+            
             <>
               {loaded && instanceRef.current && (
-                <div className="dots">
-                  {[
-                    ...Array(instanceRef.current.track.details.slides.length).keys(),
-                  ].map((idx) => {
-                    return (
+                <>
+                  <button
+                    onClick={(e: any) => e.stopPropagation() || instanceRef.current?.prev()}
+                    // disabled={currentSlide === 3 ? true : false} 
+                    >
+                    <CaretLeft />
+                  </button>
+
+
                       <button
-                        key={idx}
-                        onClick={() => {
-                          instanceRef.current?.moveToIdx(idx)
-                        }}
-                        className={"dot" + (currentSlide === idx ? " active" : "")}
-                      ></button>
-                    )
-                  })}
-                </div>
+                        onClick={(e: any) => e.stopPropagation() || instanceRef.current?.next()}
+
+                        // disabled={currentSlide === 3 ? true : false}
+                      >
+                        <CaretRight />
+                      </button>
+
+                </>
               )}
+
             </>
           </ProductStyled>
         ))}
