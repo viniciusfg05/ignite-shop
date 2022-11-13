@@ -89,7 +89,7 @@ export default function Modal(req: any) {
   return (
     <>
       <Button ref={btnRef} bg="#202024" colorScheme={'#121214'} w={"3rem"} h={"3rem"} display="flex" alignItems="center" onClick={onOpen}>
-        <NumberCardStyled>1</NumberCardStyled>
+        <NumberCardStyled>{card.length}</NumberCardStyled>
         <Icon w="24px" h="24px">
           <Handbag size={24} weight="bold" />
         </Icon>

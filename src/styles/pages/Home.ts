@@ -2,7 +2,6 @@ import { styled } from "..";
 
 export const HomeContainerStyled = styled("main", {
     display: 'flex',
-    // gap: '3rem',
     width: '100%',
     maxWidth: 'calc(100vw - ((100vw - 1180px) / 2))',
     marginLeft: 'auto',
@@ -13,6 +12,7 @@ export const HomeContainerStyled = styled("main", {
 export const ProductStyled = styled("a", {
     background: 'linear-gradient(180deg, #1ea483 0%, #7465d4 100%)',
     borderRadius: 8,
+    width: '100%',
     // padding: '0.25rem',
     cursor: 'pointer',
     position: 'relative',
@@ -20,7 +20,27 @@ export const ProductStyled = styled("a", {
     alignItems: 'center',
     justifyContent: 'center',
     minHeight: 540,
-    minWidth: 540,
+
+    iframe: {
+        // padding: '0.25rem',
+        cursor: 'pointer',
+         borderRadius: 8,
+
+        position: 'relative',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        objectFit: 'cover',
+    minHeight: 790,
+
+        '.mgp_container .mgp_gridMenu .mgp_thumbnailsGrid .mgp_gridItem .mgp_gridThumb': {
+            display: 'none',
+            width: 10,
+
+        }
+
+    },
+    
 
     img: {
         objectFit: 'cover',

@@ -51,3 +51,24 @@
 
             })
         ~~~
+
+
+
+
+
+## O que é um Design System?
+  - É incluir elementos visuais que podemos aproveitar em diversar aplicaçóes da empresa
+  - Ui kits - Consjuto de components que podemos aproveitar em algumas aplicações
+
+## Criando um design system
+  - Text: 
+  - Heading:
+  - Box ou Card:
+  - Button: 
+  - TextInput:
+  - TextArea:
+  - Checkbox:
+  - Avatar:
+  - MultiStep:
+
+## Criando pacote de tokens
